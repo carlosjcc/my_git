@@ -1,0 +1,668 @@
+List commands
+
+	git help
+
+
+Help about commands
+
+	git help <command>
+
+
+Setting up git
+
+	git config --global user.name "Carlos"
+
+	git config --global user.email "@gmail.com"
+
+	git config --global color.ui true
+
+
+Start a repo(sitory)
+
+	git inint
+
+
+******************************************************************
+git work flow
+
+	1. Create file: Starts as untracked.
+	2. Add file to staging area: Getting ready to take a picture.
+	3. Commit changes: A snapshot of those on the stage.
+******************************************************************
+
+
+Check what changed since last commit
+
+	git status
+
+
+ADD file to staging area
+
+	git add <list of files>		add the list of files
+	git add --all				add all files
+	git add *.txt				add all txt files in current directory
+	git add docs/*.txt			add all txt files in docs directory
+	git add docs/				Add al files in docs directory
+	git add "*.txt"				add all txt files in the whole project
+
+
+COMMIT changes
+
+	git commit [-m "xxx xxx"]
+
+	git -a 					Add changes from all tracked files
+							Wont add untracked files
+
+	Notes: Messages in present tense
+
+
+UNCOMMIT
+	
+	git reset -- soft HEAD^		reset into staging area 
+	Don't do it after you push
+
+
+ADDING to a COMMIT
+
+	git add <file>
+	git commit --amend 
+	Don't do it after you push
+
+
+RESET COMMIT AND CHANGES
+	
+	git reset --hard HEAD^
+	Don't do it after you push
+
+
+Undo last 2 COMMITS
+
+	git reset --hard HEAD^^
+	Don't do it after you push
+
+
+Git timeline history
+
+	git log
+
+	FORMAT
+
+	git log --pretty=format: "%h %ad- %s [%an]" 
+
+	git log --oneline -p
+		diff between commits
+
+	git log --oneline --decorate --graph --all
+		visual representation
+
+
+To figure out changes in files
+
+	git diff			show unstaged changes since last commit
+
+	git diff --staged	view staged differences
+
+	git diff <sha.> <.sha>
+
+	git blame <file> --date [short]
+
+
+To UNSTAGE files 
+	
+	git reset HEAD	<file>		Unstages file, KEEPS MODIFICATIONS
+	Don't do it after you push
+
+
+UNSTAGE AND DELETE CHANGES TO FILES
+
+	git checkout --	<file>		Blow away changes since last commit
+
+
+CREATE A BRANCH
+
+	git branch <branch-name>
+
+
+List BRANCHes
+
+	git branch 			shows only local branches
+
+	git branch -r 		list all remote branches 
+						(then can be checked out)
+
+
+Switch to a diff BRANCH
+
+	git checkout <branch-name>
+
+
+MERGE BRANCHes
+
+	1. Move to branch you want to add the other branch to
+
+		git checkout <branch-name> (master)
+
+	2. Merge branch into other branch 
+
+		git merge <branch-name-to-be-merged>
+
+
+DELETE A BRANCH
+
+	git branch -d <branch-name>
+
+
+CREATE BRANCH AND CHECK IT OUT
+
+	git checkout -b <branch-name>
+
+
+
+
+
+
+
+
+					********************
+					*** HOW TO SHARE ***
+					***    GitHub    ***
+					********************
+
+Show remote
+
+	git remote show origin
+
+	* shows remote & local branches
+
+
+ADD A REMOTE
+	
+	git remote add origin https://github.com/Gregg/git-real.git
+		(origin is the name of the remote)
+
+		git remote add <name> <address>
+
+
+LIST REMOTE REPOS THAT LOCAL REPO KNOWS ABOUT
+
+	git remote -v
+
+
+PUSH A REPO
+
+	git push -u origin master
+		origin: remote repository name
+		master: local branch to push
+		-u: so branch needn't specified every time
+		git push -u <name> <branch>
+
+
+PULLING A REMOTE
+
+	1. Ftech (or Sync) our local repository with the remote one
+	2. Merges the origin/master with master (git merge origin/master)
+
+	git pull = git fecth
+
+
+REMOVE A REMOTE
+
+	git remote rm <name>
+
+
+CLONING A REMOTE
+
+	git clone <url> [different name]
+
+	1. Download entire repository
+	2. Adds the 'origin' remote, pointing it to the clone URL
+	3. Checks out initial branch (likely master).
+
+
+CREATE A REMOTE BRANCH
+
+	git checkout -b <branch-name>
+	git push origin <branch-name>
+		Links local branch with a remote branch and tracks it
+
+		git add <file>
+		git commit...
+		git push
+
+
+DELETE A REMOTE BRANCH
+
+	git push origin :<branch-name>
+		deletes only remote branch and not local one
+
+	git branch D <branch-name> 
+
+
+DELETE OLD BRANCHES
+
+	git remote show origin
+
+	git remote prune origin
+
+
+
+
+					*********************
+					******** TAG ********				
+					*********************
+
+A tag is a reference to a commit (used mostly for release versioning)
+
+LIST TAGS
+	
+	git tag
+
+
+CHECKOUT TAGS
+
+	git checkout <tag>
+		checkout code at commit
+
+
+ADD A NEW TAG
+
+	git tag -a <tag> -m "version #.#.#"
+
+
+TAGS MUST BE PUSHED
+
+	git push --tags
+
+
+
+					********************
+					***** REBASING *****				
+					********************
+
+
+  BEFORE  					AFTER
+
+
+                              * 05
+03 *  * 05                    | 			
+   |  |                       * 04   
+02 *  * 04                 | /      
+   | /                     |/         
+   |/                      * 03        
+   * 01                    |           
+   |                       * 02        
+                           |             
+                           * 01            
+                           |         
+
+
+
+Merge commits might "pollute" history and make it messy
+
+CASE: Different git commits, "git push" fails
+
+	1. do fetch: pulls down changes but doesn't merge 'em
+
+		git fetch
+
+	2. Rebase
+		1. Move all changes to 'master' which are not in 'origin/master' to a temporary area.
+		2. Run all 'origin/master' commits.
+		3. Run all commits in the temporary area, one at a time.
+
+
+PROCESS
+	
+	git checkout <branch>
+	git rebase master
+	git checkout master
+	git merge <branch>
+
+
+IF THERE'S A CONFLICT
+
+	1. Resolve conflict.
+	2. git add <file>
+	3. git rebase --continue
+
+
+
+					*******************
+					*** INTERACTIVE ***
+					****  REBASING ****				
+					*******************
+
+
+Interactive rebase alters everty commit after the one you spedify
+
+	git rebase -i HEAD~#
+
+		pops up editor and do changes to the order of the commits	
+
+
+CHANGE COMMIT MESSAGE
+
+	git rebase -i HEAD~#		
+
+		CHANGE "pick" for "reword" in the editor
+		opens editor and change message and close editor
+
+
+CHANGE ORDER
+
+	git rebase -i HEAD~#
+
+		change order of commits (the order is backwards)	
+
+
+
+					*******************
+					** SPLIT COMMITS **				
+					*******************
+
+
+1. run rebase command
+
+	git rebase -i HEAD~#
+
+2. In the script choose "edit", then close
+	
+	2.1 If I want to add code: stage change and then do: 
+		git commit --amend
+
+3. git reset HEAD^
+
+	This is gonna roll back our last commit, leaving changes in workig directory
+
+4. stage files that I want in the commit and then commit them
+	git add <file-name>
+
+5. Repeat for other files
+
+6. git rebase --continue
+
+
+
+					********************
+					** SQUASH COMMITS **				
+					********************
+
+
+Make two or more commits into one
+
+
+ git rebase -i HEAD~# 
+
+ 	In the scrip just specify which commit you want to squash into the previous commit
+
+ 		pick	yqwhns
+ 		pick	kjhkiu		|
+ 		squash 	asdasda		|these two become one commit
+
+ 	An editor pops up, change message, save and exit
+
+
+
+					*******************
+					** EXCLUDE FILES **				
+					*******************
+
+
+ADD NAME OF FOLDER (TO EXCLUDE) TO .git/info/exclude
+	
+	*.mp4
+	logs/*.log
+
+
+
+					******************
+					**** STASHING ****				
+					******************
+
+
+You're part way through a commit, so store changes without commiting.
+
+
+STASH FILES
+
+	git stash save
+
+		1. Take uncompleted files and store them in an temporary area.
+
+		2. Restore commit
+
+
+RECOVER FILES 
+
+	git stash apply
+
+
+LIST STASHES
+
+	git stash list
+
+		stash@{0}: ...
+		stash@{1}: ...
+		stash@{2}: ...
+
+		git stash apply stash@{#}
+
+
+REMOVE STASH FROM STACK
+
+	git stash drop
+
+
+APPLY AND DROP
+
+	git stash pops
+
+
+STASH ONLY UNSTAGED FILES
+
+	git stash save --keep-index
+
+	then; git stash pop
+
+
+STASH UNTRACKED FILES
+
+	git stash sace --include-untracked
+
+	then; git stash pop
+
+
+LIST DIFFERENCES AMONG FILES
+
+	git stash list --stat
+
+
+SHOW DETAILS OF A PARTICULAR STASH
+
+	git stash show stash@{#}
+
+
+ADD A MESSAGE TO STASH
+
+	git stash save "<add message here>"
+
+
+IF BRANCH WITH STASHES WAS DELETED
+
+	git stash branch <branch-name> stash@{#}
+
+
+DELETE ALL STASHES
+
+	git stash clear
+
+
+					*******************
+					** REMOVE FILESS **				
+					*******************
+
+
+git rm <file-name>
+git commit -m "remove <file-name>"
+
+
+git rm --cached <file-name>
+	stop tracking file, not deleted from file system
+	can do .gitignore...
+	* git add .gitignore
+	  git commit -m "Ignore all files."
+
+
+
+					*******************
+					***** ALIASES *****				
+					*******************
+
+
+
+git config --global alias.st status		(git st <-> git status)
+
+git config --global alias.co checkout
+
+git config --global alias.br branch
+
+git config --global alias.ci commit
+
+
+
+					********************
+					****  CHANGING  ****
+					****  HISTORY   ****				
+					********************
+
+
+MAKE A BACKUP
+
+	git clone <repo-name> <new-repo-name>
+
+change to that directory
+
+	cd <new-repo-name>
+
+to run commands to rewrite history
+
+	git filter-branch --tree-filter <command>
+
+		git will check each commit out into working directory, run your command, and re-commit
+
+	* TO REMOVE A FILE FROM PROJECT'S ROOT
+
+		git filter-branch --tree-filter 'rm -f password.txt'
+
+	* TO REMOVE VIDEO FILES FROM ANY DIRECTORY
+
+		... --tree-filter 'find . -name "*.mp4" -exec rm {} \;'	
+
+	* TO REMOVE A FILE FROM ALL COMMITS ON ALL BRANCHES
+
+		... --tree-filter 'rm -f password.txt' -- --all
+
+	* TO REMOVE A FILE FROM ALL COMMITS ON CURRENT BRANCH
+
+		... --tree-filter 'rm -f password.txt' -- --HEAD
+
+
+	---------------------
+	--- FASTER OPTION ---
+	---------------------
+
+	git filter-branch --index-filter <command>
+
+		Linux commands do not work!!!!!!!!!!!!!!
+
+		RUND GIT COMMANDS INSTEAD (workds on staging area)
+
+	... --index-filter 'git rm --cached --ignore-unmatch pass.txt'
+
+
+	--------------------------
+	--- RUN MORE THAN ONCE ---
+	--------------------------
+
+				      ***
+	git filter-branch -f --tree-filter 'rm -f pass.txt'
+					  ***
+
+DELETE EMPTY COMMITS
+
+	git filter-branch -f --prune-empty -- --all
+
+
+
+					*****************
+					** CHERRY-PICK **					
+					*****************
+
+
+	Take a commit from a side bracnh and and pass it into a production (master) branch.
+
+1. Check out branch (master one)
+
+	git checkout <master>
+
+2. use command cherry-pick
+
+	git cherry-pick (hash #)
+
+TO CHERRY PICK AND ADD A MESSAGE
+
+	git cherry-pick --edit <hash #>
+
+TO KEEP TRACE OF A CHERRY PICKED COMMIT
+
+	git cherry-pick -x <hash #>
+
+		only works when cherry picked from public branches
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+git diff
+	That command compares what is in your working directory with what is in your staging area. The result tells you the changes you’ve made that you haven’t yet staged.
+
+git diff --staged
+
+	If you want to see what you’ve staged that will go into your next commit, you can use git diff --staged . This command compares your staged changes to your last commit.
+
+
+
+git log --stat
+
+	shows some abbreviated stats for each commit,
+
+git log --pretty=format:"%h - %an, %ar : %s"
+
+	look at page 62 of Git Pro Book
+
+git log --graph
+	This option adds a nice little ASCII graph showing your branch and merge history.
+
+
+git log --oneline --decorate --graph --all
+	
+	print a graphical rep of the git history
+
+
+git mergetool
+
+	to open meld and choose changes to keep

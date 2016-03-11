@@ -1,0 +1,49 @@
+GIT CONFIGURATION
+
+	Levels of configuration
+
+		--local		for a single repo
+		--global	for my user
+	 	--system	for all users
+
+	Check configurations
+
+		git config --global user.name...
+				   --local	
+
+		git config --global --list
+
+		nano ~/.gitconfig
+
+
+CONFIGURING LINE ENDINGS LINUX/OS/WINDOWS
+	
+	git config --global core.autoconfig input
+
+
+CONFIGURING PULL DEFAULT
+
+	git config --global pull.rebase true
+
+	1. fetches
+	2. rebases
+
+
+REUSE RECORDED RESOLUTION
+
+	git config --global rerere.enabled true
+
+CONFIGURING OUTPUT COLORS
+
+	git config --global color.ui true
+
+						***************
+						*** ALIASES ***
+						***************
+
+	git config --global alias.lg "log --oneline --decorate --all --graph"
+
+
+
+
+
